@@ -9,7 +9,7 @@ App.use(cors());
 App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 App.get("/", (req, res) => {
   res.send("API Is Running");
