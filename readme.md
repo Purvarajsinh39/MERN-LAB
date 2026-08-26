@@ -9,8 +9,7 @@ To run the backend server:
 ```bash
 cd Server
 npm install
-npm start
-# or npm run dev
+npm run dev
 ```
 
 ## Client
@@ -20,6 +19,5 @@ To run the frontend client:
 ```bash
 cd Client
 npm install
-npm run dev
-# or npm start depending on the configuration
+npm start
 ```
