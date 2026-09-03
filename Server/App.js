@@ -2,13 +2,14 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import connectDB from "./config/Db.js";
+import route from "./route/userRoute.js";
 
 const App = express();
 
 App.use(cors());
 App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
-
+App.use(route)
 const PORT = process.env.PORT;
 
 App.get("/", (req, res) => {
