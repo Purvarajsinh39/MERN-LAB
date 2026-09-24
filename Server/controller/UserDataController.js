@@ -44,7 +44,7 @@ export const getoneuser = async(req,res)=>{
 
 export const login = async(req,res)=>{
     try{
-        const udata=await UserData.findOne({email:req.body.emaill})
+        const udata=await UserData.findOne({email:req.body.email})
 
         if(!udata){
         res.status(200).json({message:"User not found",status:0})    
