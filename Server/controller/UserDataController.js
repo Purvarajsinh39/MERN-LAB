@@ -55,8 +55,7 @@ export const login = async(req,res)=>{
     if(!comaprepass){
             res.status(200).json({message:"invalid passwords",status:0}) 
         }
-        
-        res.status(200).json({message:"Login Successfully",status:0}) 
+        res.status(200).json({message:"Login Successfully",status:1}) 
 
     }
     catch(error){

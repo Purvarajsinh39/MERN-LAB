@@ -6,7 +6,7 @@ const route = express.Router()
 route.post('/api/add-user',addUser)
 route.get('/api/getall-user',getalluser)
 route.get('/api/getonne-user/:uid',getoneuser)
-route.get('/api/login',login)
+route.post('/api/login',login)
 
 
 export default route
