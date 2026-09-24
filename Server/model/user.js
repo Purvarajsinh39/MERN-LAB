@@ -16,7 +16,7 @@ const userSchema = new mongoes.Schema({
         type:String,
         require:true
     },
-    passwords:{
+    password:{
         type:String,
         require:true
     }
