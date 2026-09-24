@@ -16,6 +16,10 @@ const userSchema = new mongoes.Schema({
         type:String,
         require:true
     },
+    passwords:{
+        type:String,
+        require:true
+    }
 },{
     timestamps:true,
     collection:"UserData"

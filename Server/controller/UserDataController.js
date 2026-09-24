@@ -1,11 +1,14 @@
 import UserData from '../model/user.js'
+import bcrypt from 'bcrypt'
 
 export const addUser = async(req,res)=>{
     try{
+        const password = await bcrypt.hash(req.body.password,10)
         const saveuserdata = {
             name:req.body.name,
             email:req.body.email,
-            phone:req.body.email
+            phone:req.body.phone,
+            password:password
         }
         const saveuser = await UserData.create(saveuserdata)
         console.log("Inserted!!!")
@@ -33,6 +36,28 @@ export const getoneuser = async(req,res)=>{
         const getoneuser = await UserData.findById(id)
         console.log("Get Single The User!!!")
         res.status(200).json({'message':"GET one User!!!",data:getoneuser})
+    }
+    catch(error){
+        res.status(500).json({'message':error.message})
+    }
+}
+
+export const login = async(req,res)=>{
+    try{
+        const udata=await UserData.findOne({email:req.body.emaill})
+
+        if(!udata){
+        res.status(200).json({message:"User not found",status:0})    
+    }
+    
+    const comaprepass=await bcrypt.compare(req.body.password,udata.password)
+    
+    if(!comaprepass){
+            res.status(200).json({message:"invalid passwords",status:0}) 
+        }
+        
+        res.status(200).json({message:"Login Successfully",status:0}) 
+
     }
     catch(error){
         res.status(500).json({'message':error.message})
