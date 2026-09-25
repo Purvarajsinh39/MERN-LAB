@@ -53,10 +53,37 @@ export const login = async(req,res)=>{
     const comaprepass=await bcrypt.compare(req.body.password,udata.password)
     
     if(!comaprepass){
-            res.status(200).json({message:"invalid passwords",status:0}) 
+            res.status(200).json({  message:"invalid passwords",status:0}) 
         }
         res.status(200).json({message:"Login Successfully",status:1}) 
 
+    }
+    catch(error){
+        res.status(500).json({'message':error.message})
+    }
+}
+
+export const updateuser = async(req,res)=>{
+    try{
+        const id=req.params.uid
+        if (req.body.password) {
+            req.body.password = await bcrypt.hash(req.body.password, 10)
+        }
+        const updateuser = await UserData.findByIdAndUpdate(id,req.body,{new:true})
+        console.log("Updated User!!!")
+        res.status(200).json({'message':"Updated User!!!",data:updateuser})
+    }
+    catch(error){
+        res.status(500).json({'message':error.message})
+    }
+}
+
+export const deleteuser = async(req,res)=>{
+    try{
+        const id=req.params.uid
+        const deleteuser = await UserData.findByIdAndDelete(id)
+        console.log("Deleted User!!!")
+        res.status(200).json({'message':"Deleted User!!!",data:deleteuser})
     }
     catch(error){
         res.status(500).json({'message':error.message})
