@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function AddUser() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', mobile: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '' });
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{6,15}$/;
-    const mobileRegex = /^[6-9][0-9]{9}$/;
 
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
@@ -30,10 +30,10 @@ function AddUser() {
       newErrors.phone = 'Phone must be 6 to 15 digits';
     }
 
-    if (!formData.mobile.trim()) {
-      newErrors.mobile = 'Mobile number is required';
-    } else if (!mobileRegex.test(formData.mobile)) {
-      newErrors.mobile = 'Enter a valid 10 digit mobile number';
+    if (!formData.password.trim()) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
     }
 
     return newErrors;
@@ -43,7 +43,7 @@ function AddUser() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     const validationErrors = validate();
 
@@ -54,7 +54,18 @@ function AddUser() {
 
     setErrors({});
     console.log('Add User Data:', formData);
-    navigate('/dashboard');
+    //api call
+
+    try{
+      const res=await axios.post('http://localhost:5000/api/add-user',formData)
+      if(res.data.data){
+        navigate('/dashboard');
+      }else{
+        alert(res.data.message)
+      }
+    }catch(errors){
+      console.log(errors.message)
+    }
   };
 
   const handleCancel = () => navigate('/dashboard');
@@ -128,19 +139,19 @@ function AddUser() {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="add-mobile" className="block text-sm font-medium text-gray-700 mb-1">
-              Mobile Number
+            <label htmlFor="add-password" className="block text-sm font-medium text-gray-700 mb-1">
+              password
             </label>
             <input
-              type="text"
-              id="add-mobile"
-              name="mobile"
-              value={formData.mobile}
+              type="password"
+              id="add-password"
+              name="password"
+              value={formData.password}
               onChange={handleChange}
-              className={inputClass('mobile')}
-              placeholder="Enter 10 digit mobile number"
+              className={inputClass('password')}
+              placeholder="Enter the passwords"
             />
-            {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
           </div>
 
           <div className="flex justify-end gap-3">
