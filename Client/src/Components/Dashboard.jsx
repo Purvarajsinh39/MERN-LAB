@@ -19,16 +19,18 @@ function Dashboard() {
       console.log(error.message)
     }
 
-    // const handleadduser=()=>{
-    //   navigate('/')
-    // }
-
   }
 
-  const handleDelete = (user) => {
-    if (!window.confirm(`Are you sure you want to delete ${user.name}?`)) return;
-    console.log('Delete User Data:', user);
-    setUsers((prev) => prev.filter((u) => u._id !== user._id));
+  const handleDelete = async(id) => {
+    try{
+      const res= await axios.delete(`http://localhost:5000/api/delete-user/${id}`)
+      if(res.data.data){
+        getUserData()
+      }
+    }catch(error)
+    {
+      console.log(error.message)
+    }
   };
 
   return (
@@ -81,7 +83,7 @@ function Dashboard() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => handleDelete(user)}
+                          onClick={() => handleDelete(user._id)}
                           className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md transition-colors"
                         >
                           Delete
