@@ -6,6 +6,11 @@ import { useEffect } from 'react';
 function Dashboard() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const token = localStorage.getItem('token');
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  }
 
   useEffect(()=>{
     getUserData()
@@ -13,8 +18,13 @@ function Dashboard() {
 
   const getUserData = async()=>{
     try{
-      const res=await axios.get(`${process.env.REACT_APP_API_URL}/api/getall-user`)
-      setUsers(res.data.data)
+      const res = await axios.get('https://animated-disco-jjr577qrpxw5357r4-5000.app.github.dev/api/getall-user',{
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer "+token
+        }
+      });
+      setUsers(res.data.data);
     }catch(error){
       console.log(error.message)
     }
@@ -23,7 +33,12 @@ function Dashboard() {
 
   const handleDelete = async(id) => {
     try{
-      const res= await axios.delete(`${process.env.REACT_APP_API_URL}/api/delete-user/${id}`)
+      const res= await axios.delete(`https://animated-disco-jjr577qrpxw5357r4-5000.app.github.dev/api/delete-user/${id}`, {
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer "+token
+        }
+      })
       if(res.data.data){
         getUserData()
       }
@@ -44,6 +59,13 @@ function Dashboard() {
             className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors"
           >
             + Add User
+          </button>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-md transition-colors"
+          >
+            Logout
           </button>
         </div>
 
@@ -88,6 +110,7 @@ function Dashboard() {
                         >
                           Delete
                         </button>
+                      
                       </div>
                     </td>
                   </tr>
