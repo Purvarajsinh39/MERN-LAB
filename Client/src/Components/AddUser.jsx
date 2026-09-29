@@ -6,6 +6,7 @@ function AddUser() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '' });
   const [errors, setErrors] = useState({});
+  const token = localStorage.getItem('token');
 
   const validate = () => {
     const newErrors = {};
@@ -57,7 +58,12 @@ function AddUser() {
     //api call
 
     try{
-      const res=await axios.post(`${process.env.REACT_APP_API_URL}/api/add-user`,formData)
+      const res=await axios.post('https://animated-disco-jjr577qrpxw5357r4-5000.app.github.dev/api/add-user',formData, {
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer "+token
+        }
+      })
       if(res.data.data){
         navigate('/dashboard');
       }else{
