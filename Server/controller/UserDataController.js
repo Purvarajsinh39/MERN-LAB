@@ -1,5 +1,6 @@
 import UserData from '../model/user.js'
 import bcrypt from 'bcrypt'
+import generateToken from '../utils/jwtutils.js'
 
 export const addUser = async(req,res)=>{
     try{
@@ -47,16 +48,16 @@ export const login = async(req,res)=>{
         const udata=await UserData.findOne({email:req.body.email})
 
         if(!udata){
-        res.status(200).json({message:"User not found",status:0})    
-    }
+            return res.status(200).json({message:"User not found",status:0})
+        }
     
     const comaprepass=await bcrypt.compare(req.body.password,udata.password)
     
     if(!comaprepass){
-            res.status(200).json({  message:"invalid passwords",status:0}) 
+            return res.status(200).json({message:"Invalid password",status:0})
         }
-        res.status(200).json({message:"Login Successfully",status:1}) 
-
+    const token = generateToken(udata);
+        res.status(200).json({message:"Login Successfully",status:1, token:token}) 
     }
     catch(error){
         res.status(500).json({'message':error.message})
