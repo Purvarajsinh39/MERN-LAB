@@ -1,17 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function EditUser() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ id, name: '', email: '', phone: '', mobile: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    fetchUserData();
+  }, [id]);
+
+  const fetchUserData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/getonne-user/${id}`);
+      if (res.data.data) {
+        const { name, email, phone } = res.data.data;
+        setFormData({ name, email, phone });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const validate = () => {
     const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{6,15}$/;
-    const mobileRegex = /^[6-9][0-9]{9}$/;
 
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
@@ -31,12 +47,6 @@ function EditUser() {
       newErrors.phone = 'Phone must be 6 to 15 digits';
     }
 
-    if (!formData.mobile.trim()) {
-      newErrors.mobile = 'Mobile number is required';
-    } else if (!mobileRegex.test(formData.mobile)) {
-      newErrors.mobile = 'Enter a valid 10 digit mobile number';
-    }
-
     return newErrors;
   };
 
@@ -44,7 +54,7 @@ function EditUser() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
 
@@ -54,8 +64,17 @@ function EditUser() {
     }
 
     setErrors({});
-    console.log('Edit User Data:', formData);
-    navigate('/dashboard');
+    
+    try {
+      const res = await axios.put(`http://localhost:5000/api/update-user/${id}`, formData);
+      if (res.data.data) {
+        navigate('/dashboard');
+      } else {
+        alert(res.data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const handleCancel = () => navigate('/dashboard');
@@ -126,22 +145,6 @@ function EditUser() {
               placeholder="Enter phone number"
             />
             {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="edit-mobile" className="block text-sm font-medium text-gray-700 mb-1">
-              Mobile Number
-            </label>
-            <input
-              type="text"
-              id="edit-mobile"
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleChange}
-              className={inputClass('mobile')}
-              placeholder="Enter 10 digit mobile number"
-            />
-            {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
           </div>
 
           <div className="flex justify-end gap-3">
