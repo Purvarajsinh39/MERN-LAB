@@ -14,7 +14,7 @@ function EditUser() {
 
   const fetchUserData = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/getonne-user/${id}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/getonne-user/${id}`);
       if (res.data.data) {
         const { name, email, phone } = res.data.data;
         setFormData({ name, email, phone });
@@ -66,7 +66,7 @@ function EditUser() {
     setErrors({});
     
     try {
-      const res = await axios.put(`http://localhost:5000/api/update-user/${id}`, formData);
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/update-user/${id}`, formData);
       if (res.data.data) {
         navigate('/dashboard');
       } else {

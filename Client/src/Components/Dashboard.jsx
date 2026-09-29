@@ -13,7 +13,7 @@ function Dashboard() {
 
   const getUserData = async()=>{
     try{
-      const res=await axios.get('http://localhost:5000/api/getall-user')
+      const res=await axios.get(`${process.env.REACT_APP_API_URL}/api/getall-user`)
       setUsers(res.data.data)
     }catch(error){
       console.log(error.message)
@@ -23,7 +23,7 @@ function Dashboard() {
 
   const handleDelete = async(id) => {
     try{
-      const res= await axios.delete(`http://localhost:5000/api/delete-user/${id}`)
+      const res= await axios.delete(`${process.env.REACT_APP_API_URL}/api/delete-user/${id}`)
       if(res.data.data){
         getUserData()
       }
