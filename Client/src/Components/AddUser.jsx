@@ -57,7 +57,7 @@ function AddUser() {
     //api call
 
     try{
-      const res=await axios.post('http://localhost:5000/api/add-user',formData)
+      const res=await axios.post(`${process.env.REACT_APP_API_URL}/api/add-user`,formData)
       if(res.data.data){
         navigate('/dashboard');
       }else{
