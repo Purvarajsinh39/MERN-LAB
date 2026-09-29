@@ -18,7 +18,7 @@ function Dashboard() {
 
   const getUserData = async()=>{
     try{
-      const res = await axios.get('https://animated-disco-jjr577qrpxw5357r4-5000.app.github.dev/api/getall-user',{
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/getall-user`,{
         headers: {
           "content-type": "application/json",
           Authorization: "Bearer "+token
@@ -33,7 +33,7 @@ function Dashboard() {
 
   const handleDelete = async(id) => {
     try{
-      const res= await axios.delete(`https://animated-disco-jjr577qrpxw5357r4-5000.app.github.dev/api/delete-user/${id}`, {
+      const res= await axios.delete(`${process.env.REACT_APP_API_URL}/api/delete-user/${id}`, {
         headers: {
           "content-type": "application/json",
           Authorization: "Bearer "+token
