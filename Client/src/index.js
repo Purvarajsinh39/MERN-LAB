@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
+import axios from 'axios';
+
+// Bypass ngrok browser warning for all API requests
+axios.defaults.headers.common['ngrok-skip-browser-warning'] = '69420';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

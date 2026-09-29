@@ -38,7 +38,7 @@ function Login() {
 
     // API Calling
     try {
-      const response = await axios.post('https://animated-disco-jjr577qrpxw5357r4-5000.app.github.dev/api/login', formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, formData);
       console.log(response.data.message);
       if(response.data.status == 1) {
         localStorage.setItem('token', response.data.token);

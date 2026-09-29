@@ -15,7 +15,7 @@ function EditUser() {
 
   const fetchUserData = async () => {
     try {
-      const res = await axios.get(`https://animated-disco-jjr577qrpxw5357r4-5000.app.github.dev/api/getone-user/${id}`,{
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/getone-user/${id}`,{
         headers: {
           "content-type": "application/json",
           Authorization: "Bearer "+token
@@ -73,7 +73,7 @@ function EditUser() {
     setErrors({});
     
     try {
-      const res = await axios.put(`https://animated-disco-jjr577qrpxw5357r4-5000.app.github.dev/api/update-user/${id}`, formData, {
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/update-user/${id}`, formData, {
         headers: {
           "content-type": "application/json",
           Authorization: "Bearer "+token
