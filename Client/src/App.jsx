@@ -1,20 +1,25 @@
 import { Route, Routes } from 'react-router-dom';
-import Login from './Components/Login';
-import Dashboard from './Components/Dashboard';
-import AddUser from './Components/AddUser';
-import EditUser from './Components/EditUser';
+import AuthRoute from './AuthRoute';
+import { lazy,Suspense } from 'react';
 
+
+const Login=lazy(()=>import('./Components/Login'))
+const Dashboard=lazy(()=>import('./Components/Dashboard'))
+const AddUser=lazy(()=>import('./Components/AddUser'))
+const EditUser=lazy(()=>import('./Components/EditUser'))
 
 function App() {
   return (
     <>
-      <Routes>
+    <Suspense>
+      <Routes fallback={<div>Loading....</div>}>
         <Route path="/" element={<Login />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/users/add" element={<AddUser />} />
-        <Route path="/dashboard" element={<Dashboard />}></Route>
-      <Route path="/users/edit/:id" element={<EditUser />} />
+        <Route path="/users/add" element={<AuthRoute><AddUser /></AuthRoute>} />
+        <Route path="/dashboard" element={<AuthRoute><Dashboard /></AuthRoute>}></Route>
+      <Route path="/users/edit/:id" element={<AuthRoute><EditUser /></AuthRoute>} />
       </Routes>
+      </Suspense>
     </>
   )
 }
