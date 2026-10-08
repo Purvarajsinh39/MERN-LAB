@@ -1,6 +1,16 @@
 import UserData from '../model/user.js'
 import bcrypt from 'bcrypt'
 import generateToken from '../utils/jwtutils.js'
+import multer from "multer"
+
+const imguploader = multer.diskStorage({
+  destination: function(req, file, cb) => {
+    cb(null, './uploads');
+  },
+  filename: function(req, file, cb) => {
+    cb(null,file.fieldname+"_"+Date.now()+".jpg");
+  }
+});
 
 export const addUser = async(req,res)=>{
     try{
@@ -9,6 +19,7 @@ export const addUser = async(req,res)=>{
             name:req.body.name,
             email:req.body.email,
             phone:req.body.phone,
+            image:req.file?req.file.filename:null,
             password:password
         }
         const saveuser = await UserData.create(saveuserdata)

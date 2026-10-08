@@ -20,6 +20,10 @@ const userSchema = new mongoes.Schema({
         type:String,
         require:true
     }
+    image:{
+        type:String,
+        require:false
+    }
 },{
     timestamps:true,
     collection:"UserData"
