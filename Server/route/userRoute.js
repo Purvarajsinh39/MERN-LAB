@@ -1,9 +1,9 @@
 import express from 'express'
-import { addUser,getalluser,getoneuser,login,updateuser,deleteuser } from '../controller/UserDataController.js'
+import { addUser,getalluser,getoneuser,login,updateuser,deleteuser,imguploader } from '../controller/UserDataController.js'
 import authenticateToken from '../utils/Authmiddleware.js'
 const route = express.Router()
 
-route.post('/api/add-user',addUser)
+route.post('/api/add-user',imguploader.single("image"),addUser)
 route.get('/api/getall-user',authenticateToken,getalluser)
 route.get('/api/getone-user/:uid',authenticateToken,getoneuser)
 route.put('/api/update-user/:uid',authenticateToken,updateuser)
