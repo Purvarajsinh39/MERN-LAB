@@ -19,7 +19,7 @@ const userSchema = new mongoes.Schema({
     password:{
         type:String,
         require:true
-    }
+    },
     image:{
         type:String,
         require:false

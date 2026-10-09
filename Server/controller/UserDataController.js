@@ -3,11 +3,11 @@ import bcrypt from 'bcrypt'
 import generateToken from '../utils/jwtutils.js'
 import multer from "multer"
 
-const imguploader = multer.diskStorage({
-  destination: function(req, file, cb) => {
+export const imguploader = multer.diskStorage({
+  destination: function(req, file, cb) {
     cb(null, './uploads');
   },
-  filename: function(req, file, cb) => {
+  filename: function(req, file, cb) {
     cb(null,file.fieldname+"_"+Date.now()+".jpg");
   }
 });
