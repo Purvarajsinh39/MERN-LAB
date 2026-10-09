@@ -1,25 +1,53 @@
 import UserData from '../model/user.js'
 import bcrypt from 'bcrypt'
 import generateToken from '../utils/jwtutils.js'
-import multer from "multer"
+import { v2 as cloudinary } from 'cloudinary';
+import { Readable } from 'stream';
 
-export const imguploader = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, './uploads');
-  },
-  filename: function(req, file, cb) {
-    cb(null,file.fieldname+"_"+Date.now()+".jpg");
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+
+
+export const uploadcloudinary = (buffer) =>{
+    return new Promise((resolve,reject)=>{
+       const stream = cloudinary.uploader.upload_stream(
+       {folder:'Mern_Lab'},
+       (error,result)=>{
+        if(error)return reject(error)
+            resolve(result)
+       })
+       
+       // Using Node's built-in stream to pipe the buffer safely
+       Readable.from(buffer).pipe(stream);
+    })
+}
+
+// export const imguploader = multer.diskStorage({
+//   destination: function(req, file, cb) {
+//     cb(null, './uploads');
+//   },
+//   filename: function(req, file, cb) {
+//     cb(null,file.fieldname+"_"+Date.now()+".jpg");
+//   }
+// });
 
 export const addUser = async(req,res)=>{
     try{
         const password = await bcrypt.hash(req.body.password,10)
+        let image = ""
+        if(req.file){
+            const result = await uploadcloudinary(req.file.buffer)
+            image=result.secure_url
+        }
         const saveuserdata = {
             name:req.body.name,
             email:req.body.email,
             phone:req.body.phone,
-            image:req.file?req.file.filename:null,
+            image:image,
             password:password
         }
         const saveuser = await UserData.create(saveuserdata)
